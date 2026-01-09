@@ -115,17 +115,17 @@ int main()
 	
 	vector<string> wordsArray;
 	int life, index;
-	string word, wordGuessed;
-	char chr, letter, playAgain;
+	string word, wordGuessed, wordIn;
+	char chr, playAgain, letter;
 	bool run, finish, found, wordNotGuessed;
 	int randNum, count;
 
 	
 	run = true;
 
+
 	//Getting the word from file and into array
 
-	
 	while (getline(words, word))
 	{
 		if (!word.empty())
@@ -195,55 +195,81 @@ int main()
 			index = 0;
 
 
-			cout << "Enter charachter: ";
-			cin >> letter;
-			for (int i = 0; i < word.length(); i++)
+			cout << "Enter charachter/word: ";
+			cin >> wordIn;
+
+			if (wordIn.length() > 1)
 			{
-				if (word[i] == letter)
+				if (wordIn == word)
 				{
-					found = true;
-					wordGuessed[i] = letter;
-				}
-			}
-
-
-
-			if (not found)
-			{
-				life -= 1;
-				PrintHangMan(life);
-				//cout << "\n";
-				if (life == 0)
-				{
-					finish = true;
-					cout << "\nOOPS.. You failed\n";
+					cout << "\nCongrats.. You guessed the word:\n";
 					cout << word << "\n";
+					finish = true;
 				}
+				else
+				{
+					life -= 1;
+					PrintHangMan(life);
+					//cout << "\n";
+					if (life == 0)
+					{
+						finish = true;
+						cout << "\nOOPS.. You failed\n";
+						cout << word << "\n";
+					}
+				}
+
 			}
+			else
+			{ 
+				letter = wordIn[0];
+				for (int i = 0; i < word.length(); i++)
+				{
+					if (word[i] == letter)
+					{
+						found = true;
+						wordGuessed[i] = letter;
+					}
+				}
 
 
-			while (index < wordGuessed.length())
-			{
-				if (wordGuessed[index] == '-')
-					wordNotGuessed = true;
-				index++;
+
+				if (not found)
+				{
+					life -= 1;
+					PrintHangMan(life);
+					//cout << "\n";
+					if (life == 0)
+					{
+						finish = true;
+						cout << "\nOOPS.. You failed\n";
+						cout << word << "\n";
+					}
+				}
+
+
+				while (index < wordGuessed.length())
+				{
+					if (wordGuessed[index] == '-')
+						wordNotGuessed = true;
+					index++;
+
+				}
+
+
+
+				if (wordNotGuessed == false)
+				{
+					cout << "\nCongrats.. You guessed the word:\n";
+					cout << wordGuessed << "\n";
+					finish = true;
+				}
+				else if (life != 0)
+					cout << "\n" << wordGuessed << "\n";
+
+				found = false;
 
 			}
-
-
-
-			if (wordNotGuessed == false)
-			{
-				cout << "\nCongrats.. You guessed the word:\n";
-				cout << wordGuessed << "\n";
-				finish = true;
-			}
-			else if (life != 0)
-				cout << "\n" << wordGuessed << "\n";
-
-			found = false;
-
-
 		}
 
 		cout << "\nPlay again? (y/n): ";

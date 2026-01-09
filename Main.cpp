@@ -4,15 +4,34 @@
 #include <cstdlib>
 #include <ctime>
 #include <string>
+#include <cctype>
+
 using namespace std;
+
+const string SPACE = "                         ";
+const string TITLESPACE = "                   ";
+
+string lowerString(string stringToLower)
+{
+	for (char& c : stringToLower)
+	{
+		c = tolower(static_cast<unsigned char>(c));
+	}
+	return stringToLower;
+}
+
+void removeElement(vector<string> &v, int index)
+{
+	v.erase(v.begin() + index);
+}
 
 void PrintGameHead()
 {
 	//Game Start
-	cout << "           ________________________\n";
-	cout << "          |                        |\n";
-	cout << "          | HANG MAN: MOVIES/SHOWS |\n";
-	cout << "          |________________________|\n";
+	cout << TITLESPACE << " ________________________\n";
+	cout << TITLESPACE << "|                        |\n";
+	cout << TITLESPACE << "| HANG MAN: MOVIES/SHOWS |\n";
+	cout << TITLESPACE << "|________________________|\n";
 
 }
 
@@ -20,107 +39,106 @@ void PrintHangMan(int life)
 {
 	if (life == 6)
 	{
-		cout << "     ______\n";
-		cout << "    |      |\n";
-		cout << "    |\n";
-		cout << "    |\n";
-		cout << "    |\n";
-		cout << "    |\n";
-		cout << "    |\n";
-		cout << "____|____\n";
+		cout << SPACE << "     ______\n";
+		cout << SPACE << "    |      |\n";
+		cout << SPACE << "    |\n";
+		cout << SPACE << "    |\n";
+		cout << SPACE << "    |\n";
+		cout << SPACE << "    |\n";
+		cout << SPACE << "    |\n";
+		cout << SPACE << "____|____\n";
 	}
 	else if (life == 5)
 	{
-		cout << "     ______\n";
-		cout << "    |      |\n";
-		cout << "    |      O\n";
-		cout << "    |\n";
-		cout << "    |\n";
-		cout << "    |\n";
-		cout << "    |\n";
-		cout << "____|____\n";
+		cout << SPACE << "     ______\n";
+		cout << SPACE << "    |      |\n";
+		cout << SPACE << "    |      O\n";
+		cout << SPACE << "    |\n";
+		cout << SPACE << "    |\n";
+		cout << SPACE << "    |\n";
+		cout << SPACE << "    |\n";
+		cout << SPACE << "____|____\n";
 	}
 	else if (life == 4)
 	{
-		cout << "     ______\n";
-		cout << "    |      |\n";
-		cout << "    |      O\n";
-		cout << "    |      |\n";
-		cout << "    |      |\n";
-		cout << "    |\n";
-		cout << "    |\n";
-		cout << "____|____\n";
+		cout << SPACE << "     ______\n";
+		cout << SPACE << "    |      |\n";
+		cout << SPACE << "    |      O\n";
+		cout << SPACE << "    |      |\n";
+		cout << SPACE << "    |      |\n";
+		cout << SPACE << "    |\n";
+		cout << SPACE << "    |\n";
+		cout << SPACE << "____|____\n";
 	}
 	else if (life == 3)
 	{
-		cout << "     ______\n";
-		cout << "    |      |\n";
-		cout << "    |      O\n";
-		cout << "    |      |-->\n";
-		cout << "    |      |\n";
-		cout << "    |\n";
-		cout << "    |\n";
-		cout << "____|____\n";
+		cout << SPACE << "     ______\n";
+		cout << SPACE << "    |      |\n";
+		cout << SPACE << "    |      O\n";
+		cout << SPACE << "    |      |-->\n";
+		cout << SPACE << "    |      |\n";
+		cout << SPACE << "    |\n";
+		cout << SPACE << "    |\n";
+		cout << SPACE << "____|____\n";
 	}
 	else if (life == 2)
 	{
-		cout << "     ______\n";
-		cout << "    |      |\n";
-		cout << "    |      O\n";
-		cout << "    |   <--|-->\n";
-		cout << "    |      |\n";
-		cout << "    |\n";
-		cout << "    |\n";
-		cout << "____|____\n";
+		cout << SPACE << "     ______\n";
+		cout << SPACE << "    |      |\n";
+		cout << SPACE << "    |      O\n";
+		cout << SPACE << "    |   <--|-->\n";
+		cout << SPACE << "    |      |\n";
+		cout << SPACE << "    |\n";
+		cout << SPACE << "    |\n";
+		cout << SPACE << "____|____\n";
 	}
 	else if (life == 1)
 	{
-		cout << "     ______\n";
-		cout << "    |      |\n";
-		cout << "    |      O\n";
-		cout << "    |   <--|-->\n";
-		cout << "    |      |\n";
-		cout << "    |       \\\n";
-		cout << "    |        \\\n";
-		cout << "____|____\n";
+		cout << SPACE << "     ______\n";
+		cout << SPACE << "    |      |\n";
+		cout << SPACE << "    |      O\n";
+		cout << SPACE << "    |   <--|-->\n";
+		cout << SPACE << "    |      |\n";
+		cout << SPACE << "    |       \\\n";
+		cout << SPACE << "    |        \\\n";
+		cout << SPACE << "____|____\n";
 	}
 	else if (life == 0)
 	{
-		cout << "     ______\n";
-		cout << "    |      |\n";
-		cout << "    |      O\n";
-		cout << "    |   <--|-->\n";
-		cout << "    |      |\n";
-		cout << "    |     / \\\n";
-		cout << "    |    /   \\\n";
-		cout << "____|____\n";
+		cout << SPACE << "     ______\n";
+		cout << SPACE << "    |      |\n";
+		cout << SPACE << "    |      O\n";
+		cout << SPACE << "    |   <--|-->\n";
+		cout << SPACE << "    |      |\n";
+		cout << SPACE << "    |     / \\\n";
+		cout << SPACE << "    |    /   \\\n";
+		cout << SPACE << "____|____\n";
 	}
 }
 
 
 int main()
 {
-	
+
 	//Generating different random numbers each time
 	srand(time(0));
-	
+
 	ifstream words;
 	words.open("words.txt");
-	
+
 	if (!words.is_open())
 	{
 		cout << "Error: words.txt not found!\n";
 		return 1;
 	}
-	
+
 	vector<string> wordsArray;
 	int life, index;
-	string word, wordGuessed, wordIn;
+	string word, wordGuessed, wordIn, wordLower;
 	char playAgain, letter;
 	bool run, finish, found, wordNotGuessed;
 	int randNum;
 
-	
 	run = true;
 
 
@@ -146,17 +164,20 @@ int main()
 		finish = false;
 		run = false;
 		word = "";
-		
+
 		wordGuessed = "";
-
-
+		
 		// Selecting random word
-		randNum = rand() % (wordsArray.size() - 1);
-
+		if (wordsArray.size() > 1)
+			randNum = rand() % (wordsArray.size() - 1);
+		else
+			randNum = 0;
+		
 		word = wordsArray.at(randNum);
+		wordLower = lowerString(word);
 
 		PrintHangMan(life);
-		
+
 		cout << "\nGuess the word:\n\n";
 
 
@@ -174,10 +195,10 @@ int main()
 
 
 		//Loop of guessing charchters
-		
+
 		while (finish == false)
 		{
-			
+
 			wordNotGuessed = false;
 			index = 0;
 			wordIn = "";
@@ -186,19 +207,23 @@ int main()
 			cout << "Enter charachter/word: ";
 			std::getline(std::cin, wordIn);
 			
+			wordIn = lowerString(wordIn);
+
+			
+
 			if (wordIn.length() > 1)
 			{
-				if (wordIn == word)
+				if (wordIn == wordLower)
 				{
-					cout << "\nCongrats.. You guessed the word:\n";
-					cout << word << "\n";
+					cout << "\nCongrats.. You guessed the word: " << word << "\n";
 					finish = true;
 				}
 				else
 				{
-					
+
 					life -= 1;
 					PrintHangMan(life);
+					cout << "\n" << wordGuessed << "\n";
 					//cout << "\n";
 					if (life == 0)
 					{
@@ -210,14 +235,15 @@ int main()
 
 			}
 			else
-			{ 
+			{
 				letter = wordIn[0];
-				for (int i = 0; i < word.length(); i++)
+				//cout << letter << "\n";
+				for (int i = 0; i < wordLower.length(); i++)
 				{
-					if (word[i] == letter)
+					if (wordLower[i] == letter)
 					{
 						found = true;
-						wordGuessed[i] = letter;
+						wordGuessed[i] = word[i];
 					}
 				}
 
@@ -227,7 +253,7 @@ int main()
 				{
 					life -= 1;
 					PrintHangMan(life);
-					//cout << "\n";
+					
 					if (life == 0)
 					{
 						finish = true;
@@ -249,8 +275,7 @@ int main()
 
 				if (wordNotGuessed == false)
 				{
-					cout << "\nCongrats.. You guessed the word:\n";
-					cout << wordGuessed << "\n";
+					cout << "\nCongrats.. You guessed the word: " << wordGuessed << "\n";
 					finish = true;
 				}
 				else if (life != 0)
@@ -260,6 +285,24 @@ int main()
 
 			}
 		}
+
+		//removing movie/series from vector to prevent repeat
+		
+		removeElement(wordsArray, randNum);
+		
+		
+		//When vector is empty
+
+		if (wordsArray.size() == 0)
+		{
+			cout << "\n--------------------------------------------\n";
+			cout << "    Congrats!! You completed the game!!\n";
+			cout << "--------------------------------------------\n\n\n";
+			break;
+		}
+
+
+		//Playing Again or exiting
 
 		cout << "\nPlay again? (y/n): ";
 		std::cin >> playAgain;

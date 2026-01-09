@@ -1,3 +1,5 @@
+
+//Libraries
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -8,8 +10,11 @@
 
 using namespace std;
 
+
+//Constants
 const string SPACE = "                         ";
 const string TITLESPACE = "                   ";
+
 
 string lowerString(string stringToLower)
 {
@@ -20,10 +25,13 @@ string lowerString(string stringToLower)
 	return stringToLower;
 }
 
-void removeElement(vector<string> &v, int index)
+
+//Removes element from vector once used
+void removeElement(vector<string>& v, int index)
 {
 	v.erase(v.begin() + index);
 }
+
 
 void PrintGameHead()
 {
@@ -34,6 +42,7 @@ void PrintGameHead()
 	cout << TITLESPACE << "|________________________|\n";
 
 }
+
 
 void PrintHangMan(int life)
 {
@@ -117,46 +126,98 @@ void PrintHangMan(int life)
 }
 
 
+//Store words in vector from file
+vector<string> loadWordsFromFile(ifstream& file)
+{
+	string wordRead;
+	vector<string> wordVector;
+
+	while (std::getline(file, wordRead))
+	{
+		if (!wordRead.empty())
+			wordVector.push_back(wordRead);
+	}
+
+	return wordVector;
+
+}
+
+
+//Printing game is completed when no more words are left to guess in the vector 
+bool printGameComplete(vector<string> wordVector)
+{
+	bool complete = false;
+
+	if (wordVector.size() == 0)
+	{
+		cout << "\n--------------------------------------------\n";
+		cout << "    Congrats!! You completed the game!!\n";
+		cout << "--------------------------------------------\n\n\n";
+		
+		complete = true;
+	}
+	return complete;
+}
+
+
+//Asking users if they want to play another round
+bool askPlayAgain()
+{
+	char playAgain = 'x';
+	bool returnVal = false;
+
+	playAgain = tolower(playAgain);
+	while ((playAgain != 'y') and (playAgain != 'n'))
+	{
+		cout << "\nPlay again? (y/n): ";
+		std::cin >> playAgain;
+		playAgain = tolower(playAgain);
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		if (playAgain == 'y')
+			returnVal = true;
+		else if (playAgain == 'n')
+			returnVal = false;
+		else
+			cout << "Invalid input.. Try again";
+	}
+	return returnVal;
+}
+
+
 int main()
 {
-
 	//Generating different random numbers each time
 	srand(time(0));
 
+
+	//Opening file to read titles
 	ifstream words;
 	words.open("words.txt");
 
+
+	//Checking if file opnened
 	if (!words.is_open())
 	{
 		cout << "Error: words.txt not found!\n";
 		return 1;
 	}
 
+
+	//Declarations
 	vector<string> wordsArray;
 	int life, index;
 	string word, wordGuessed, wordIn, wordLower;
 	char playAgain, letter;
-	bool run, finish, found, wordNotGuessed;
+	bool run, finish, found, wordNotGuessed, complete;
 	int randNum;
 
 	run = true;
 
+	wordsArray = loadWordsFromFile(words);
 
-	//Getting the word from file and into array
-
-	while (std::getline(words, word))
-	{
-		if (!word.empty())
-			wordsArray.push_back(word);
-	}
-
-
-	//Printing the game title
 	PrintGameHead();
 
-
 	//Loop of different rounds
-
 	while (run)
 	{
 		life = 6;
@@ -166,13 +227,13 @@ int main()
 		word = "";
 
 		wordGuessed = "";
-		
+
 		// Selecting random word
 		if (wordsArray.size() > 1)
 			randNum = rand() % (wordsArray.size() - 1);
 		else
 			randNum = 0;
-		
+
 		word = wordsArray.at(randNum);
 		wordLower = lowerString(word);
 
@@ -194,8 +255,7 @@ int main()
 		cout << "\n";
 
 
-		//Loop of guessing charchters
-
+		//Loop of guessing charchters until word is guesed
 		while (finish == false)
 		{
 
@@ -206,11 +266,11 @@ int main()
 
 			cout << "Enter charachter/word: ";
 			std::getline(std::cin, wordIn);
-			
+
 			wordIn = lowerString(wordIn);
 
-			
 
+			//Checking if whole word is guessed or just a charachter
 			if (wordIn.length() > 1)
 			{
 				if (wordIn == wordLower)
@@ -236,8 +296,10 @@ int main()
 			}
 			else
 			{
+				//If charchter guessed then storing it in a variable
 				letter = wordIn[0];
-				//cout << letter << "\n";
+
+				//Checking if charchter is found in the word to be guessed
 				for (int i = 0; i < wordLower.length(); i++)
 				{
 					if (wordLower[i] == letter)
@@ -248,12 +310,12 @@ int main()
 				}
 
 
-
+				//If wrong charchter guessed then print hangman and reduce life
 				if (not found)
 				{
 					life -= 1;
 					PrintHangMan(life);
-					
+
 					if (life == 0)
 					{
 						finish = true;
@@ -263,6 +325,7 @@ int main()
 				}
 
 
+				//Checks if the whole word is guessed
 				while (index < wordGuessed.length())
 				{
 					if (wordGuessed[index] == '-')
@@ -272,7 +335,7 @@ int main()
 				}
 
 
-
+				//If the whole word is guessed then exits loop to ask to start another round
 				if (wordNotGuessed == false)
 				{
 					cout << "\nCongrats.. You guessed the word: " << wordGuessed << "\n";
@@ -287,32 +350,18 @@ int main()
 		}
 
 		//removing movie/series from vector to prevent repeat
-		
 		removeElement(wordsArray, randNum);
-		
-		
-		//When vector is empty
 
-		if (wordsArray.size() == 0)
+
+		//Exit program when vector becommes empty
+		complete = printGameComplete(wordsArray);
+		if (complete)
 		{
-			cout << "\n--------------------------------------------\n";
-			cout << "    Congrats!! You completed the game!!\n";
-			cout << "--------------------------------------------\n\n\n";
-			break;
+			return 1;
 		}
 
 
-		//Playing Again or exiting
-
-		cout << "\nPlay again? (y/n): ";
-		std::cin >> playAgain;
-		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-		if (playAgain == 'y')
-			run = true;
-		else if (playAgain == 'n')
-			run = false;
-		else
-			cout << "Invalid input.. Try again";
+		run = askPlayAgain();
 	}
 
 	words.close();

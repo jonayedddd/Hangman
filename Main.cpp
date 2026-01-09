@@ -116,9 +116,9 @@ int main()
 	vector<string> wordsArray;
 	int life, index;
 	string word, wordGuessed, wordIn;
-	char chr, playAgain, letter;
+	char playAgain, letter;
 	bool run, finish, found, wordNotGuessed;
-	int randNum, count;
+	int randNum;
 
 	
 	run = true;
@@ -126,28 +126,12 @@ int main()
 
 	//Getting the word from file and into array
 
-	while (getline(words, word))
+	while (std::getline(words, word))
 	{
 		if (!word.empty())
 			wordsArray.push_back(word);
 	}
 
-	/*while (!words.eof())
-	{
-		words.get(chr);
-		while (chr != '\n')
-		{
-			word += chr;
-			words.get(chr);
-
-		}
-		wordsArray.push_back(word);
-		word = "";
-	}
-	*/
-	//cout << wordsArray.at(1);
-	
-	//cout << wordsArray.size();
 
 	//Printing the game title
 	PrintGameHead();
@@ -162,14 +146,17 @@ int main()
 		finish = false;
 		run = false;
 		word = "";
+		
 		wordGuessed = "";
 
 
 		// Selecting random word
 		randNum = rand() % (wordsArray.size() - 1);
+
 		word = wordsArray.at(randNum);
 
 		PrintHangMan(life);
+		
 		cout << "\nGuess the word:\n\n";
 
 
@@ -187,17 +174,18 @@ int main()
 
 
 		//Loop of guessing charchters
-
+		
 		while (finish == false)
 		{
-
+			
 			wordNotGuessed = false;
 			index = 0;
+			wordIn = "";
 
 
 			cout << "Enter charachter/word: ";
-			cin >> wordIn;
-
+			std::getline(std::cin, wordIn);
+			
 			if (wordIn.length() > 1)
 			{
 				if (wordIn == word)
@@ -208,6 +196,7 @@ int main()
 				}
 				else
 				{
+					
 					life -= 1;
 					PrintHangMan(life);
 					//cout << "\n";
@@ -243,7 +232,7 @@ int main()
 					{
 						finish = true;
 						cout << "\nOOPS.. You failed\n";
-						cout << word << "\n";
+						cout << "The word was: " << word << "\n";
 					}
 				}
 
@@ -273,7 +262,8 @@ int main()
 		}
 
 		cout << "\nPlay again? (y/n): ";
-		cin >> playAgain;
+		std::cin >> playAgain;
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		if (playAgain == 'y')
 			run = true;
 		else if (playAgain == 'n')
@@ -281,6 +271,8 @@ int main()
 		else
 			cout << "Invalid input.. Try again";
 	}
+
+	words.close();
 
 	return 0;
 }

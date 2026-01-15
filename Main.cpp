@@ -44,6 +44,7 @@ void PrintGameHead()
 }
 
 
+
 void PrintHangMan(int life)
 {
 	if (life == 6)
@@ -109,7 +110,7 @@ void PrintHangMan(int life)
 		cout << SPACE << "    |   <--|-->\n";
 		cout << SPACE << "    |      |\n";
 		cout << SPACE << "    |       \\\n";
-		cout << SPACE << "    |        \\\n";
+		cout << SPACE << "    |        \\_\n";
 		cout << SPACE << "____|____\n";
 	}
 	else if (life == 0)
@@ -120,7 +121,7 @@ void PrintHangMan(int life)
 		cout << SPACE << "    |   <--|-->\n";
 		cout << SPACE << "    |      |\n";
 		cout << SPACE << "    |     / \\\n";
-		cout << SPACE << "    |    /   \\\n";
+		cout << SPACE << "    |   _/   \\_\n";
 		cout << SPACE << "____|____\n";
 	}
 }
@@ -153,7 +154,7 @@ bool printGameComplete(vector<string> wordVector)
 		cout << "\n--------------------------------------------\n";
 		cout << "    Congrats!! You completed the game!!\n";
 		cout << "--------------------------------------------\n\n\n";
-		
+
 		complete = true;
 	}
 	return complete;
@@ -183,6 +184,51 @@ bool askPlayAgain()
 	return returnVal;
 }
 
+bool searchVector(std::vector<char> v, char letterToSearch)
+{
+	char currentLetter = 'z';
+	bool letterFound = false;
+	int size, index;
+	size = v.size();
+	index = 0;
+
+	while (letterFound == false and index < size)
+	{
+		currentLetter = v[index];
+		if (currentLetter == letterToSearch)
+			letterFound = true;
+		else
+			index++;
+	}
+
+	return letterFound;
+}
+
+//vector<char> v is the vector that stores letters that were already guessed by the user
+// char letterToAdd adds the guessed charchter to the vector if the letter was not guessed before
+//adds the letter inputted to a vector to keep track of the letters already guessed by the user
+void addGuessedLettersToVector(std::vector<char>& v, char letterToAdd)
+{
+	if (searchVector(v, letterToAdd) == false)
+		v.push_back(letterToAdd);
+}
+
+//vector<char> v is the vector of letters that were already guessed
+//prints out the letters that were already guessed by the user so they can keep track
+void printGuessedLetters(std::vector<char> v)
+{
+	if (v.size() > 0)
+	{
+		std::cout << "\n\n\nLetters guessed:\n";
+		for (char currentChar : v)
+		{
+			std::cout << currentChar << " | ";
+		}
+		std::cout << "\n";
+	}
+}
+
+
 
 int main()
 {
@@ -205,6 +251,7 @@ int main()
 
 	//Declarations
 	vector<string> wordsArray;
+	vector<char> lettersGuessed;
 	int life, index;
 	string word, wordGuessed, wordIn, wordLower;
 	char playAgain, letter;
@@ -220,6 +267,7 @@ int main()
 	//Loop of different rounds
 	while (run)
 	{
+		lettersGuessed.clear();
 		life = 6;
 		found = false;
 		finish = false;
@@ -283,6 +331,7 @@ int main()
 
 					life -= 1;
 					PrintHangMan(life);
+					printGuessedLetters(lettersGuessed);
 					cout << "\n" << wordGuessed << "\n";
 					//cout << "\n";
 					if (life == 0)
@@ -298,51 +347,60 @@ int main()
 			{
 				//If charchter guessed then storing it in a variable
 				letter = wordIn[0];
-
-				//Checking if charchter is found in the word to be guessed
-				for (int i = 0; i < wordLower.length(); i++)
+				if (searchVector(lettersGuessed, letter) == false)
 				{
-					if (wordLower[i] == letter)
+					addGuessedLettersToVector(lettersGuessed, letter);
+					//Checking if charchter is found in the word to be guessed
+					for (int i = 0; i < wordLower.length(); i++)
 					{
-						found = true;
-						wordGuessed[i] = word[i];
+						if (wordLower[i] == letter)
+						{
+							found = true;
+							wordGuessed[i] = word[i];
+						}
 					}
-				}
 
 
-				//If wrong charchter guessed then print hangman and reduce life
-				if (not found)
-				{
-					life -= 1;
-					PrintHangMan(life);
-
-					if (life == 0)
+					//If wrong charchter guessed then print hangman and reduce life
+					if (not found)
 					{
+						life -= 1;
+						PrintHangMan(life);
+
+						if (life == 0)
+						{
+							finish = true;
+							cout << "\nOOPS.. You failed\n";
+							cout << "The word was: " << word << "\n";
+						}
+					}
+
+
+					//Checks if the whole word is guessed
+					while (index < wordGuessed.length())
+					{
+						if (wordGuessed[index] == '-')
+							wordNotGuessed = true;
+						index++;
+
+					}
+
+
+					//If the whole word is guessed then exits loop to ask to start another round
+					if (wordNotGuessed == false)
+					{
+						cout << "\nCongrats.. You guessed the word: " << wordGuessed << "\n";
 						finish = true;
-						cout << "\nOOPS.. You failed\n";
-						cout << "The word was: " << word << "\n";
+					}
+					else if (life != 0)
+					{
+						printGuessedLetters(lettersGuessed);
+						cout << "\n" << wordGuessed << "\n";
+
 					}
 				}
-
-
-				//Checks if the whole word is guessed
-				while (index < wordGuessed.length())
-				{
-					if (wordGuessed[index] == '-')
-						wordNotGuessed = true;
-					index++;
-
-				}
-
-
-				//If the whole word is guessed then exits loop to ask to start another round
-				if (wordNotGuessed == false)
-				{
-					cout << "\nCongrats.. You guessed the word: " << wordGuessed << "\n";
-					finish = true;
-				}
-				else if (life != 0)
-					cout << "\n" << wordGuessed << "\n";
+				else
+					std::cout << "\nLetter guessed before!! Try Again..\n\n";
 
 				found = false;
 

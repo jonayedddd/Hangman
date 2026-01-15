@@ -8,6 +8,7 @@ A dynamic, console-based implementation of the classic Hangman game written in C
 * **Input Validation:** Handles character casing (auto-converts to lowercase) and validates user guesses.
 * **Visual Interface:** Displays a progressive ASCII art "Hangman" figure as lives decrease.
 * **Replay System:** Prevents repeat words within a single session and allows the user to restart the game seamlessly.
+* **Smart Input History:** Displays a running list of "Letters Guessed" to help the player strategize and avoids penalizing the player for accidentally entering the same letter twice.
 
 ## 🛠️ Technical Implementation
 * **Language:** C++
